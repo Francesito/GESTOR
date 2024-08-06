@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Crear Tabla en <%= dbName %></title>
+  <style>
+    .campo {
+      margin-bottom: 10px;
+    }
+  </style>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <h1>Crear Tabla en <%= dbName %></h1>
+  <form action="/crear-tabla" method="POST" id="aggTabla">
+    <input type="hidden" name="dbName" value="<%= dbName %>">
+    <label for="tableName">Nombre de la Tabla:</label>
+    <input type="text" id="tableName" name="tableName" required>
+    <div id="campos">
+      <div class="campo">
+        <label for="campoNombre">Nombre del Campo:</label>
+        <input type="text" name="campos[0][nombre]" required>
+        <label for="campoTipo">Tipo:</label>
+        <select name="campos[0][tipo]" required>
+          <option value="INT">INT</option>
+          <option value="DOUBLE">DOUBLE</option>
+          <option value="TEXT">TEXT</option>
+        </select>
+        <label for="campoLlave">Llave Primaria:</label>
+        <input type="checkbox" name="campos[0][llave]">
+      </div>
+    </div>
+    <button type="button" onclick="agregarCampo()">Agregar Campo</button>
+    <button type="submit">Crear Tabla</button>
+  </form>
+  <script>
+    let campoCount = 1;
+    function agregarCampo() {
+      const camposDiv = document.getElementById('campos');
+      const nuevoCampo = document.createElement('div');
+      nuevoCampo.classList.add('campo');
+      nuevoCampo.innerHTML = `
+        <label for="campoNombre">Nombre del Campo:</label>
+        <input type="text" name="campos[${campoCount}][nombre]" required>
+        <label for="campoTipo">Tipo:</label>
+        <select name="campos[${campoCount}][tipo]" required>
+          <option value="INT">INT</option>
+          <option value="DOUBLE">DOUBLE</option>
+          <option value="TEXT">TEXT</option>
+        </select>
+        <label for="campoLlave">Llave Primaria:</label>
+        <input type="checkbox" name="campos[${campoCount}][llave]">
+      `;
+      camposDiv.appendChild(nuevoCampo);
+      campoCount++;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Contenido de la Base de Datos: <%= dbName %></title>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <h1>Contenido de la Base de Datos: <%= dbName %></h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre de la Tabla</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% tables.forEach(table => { %>
+        <tr>
+          <td><%= table[`Tables_in_${dbName}`] %></td>
+          <td>
+            <form action="/ver-tabla" method="GET" style="display:inline;">
+              <input type="hidden" name="dbName" value="<%= dbName %>">
+              <input type="hidden" name="tableName" value="<%= table[`Tables_in_${dbName}`] %>">
+              <button type="submit">Ver</button>
+            </form>
+            <form action="/borrar-tabla" method="POST" style="display:inline;">
+              <input type="hidden" name="dbName" value="<%= dbName %>">
+              <input type="hidden" name="tableName" value="<%= table[`Tables_in_${dbName}`] %>">
+              <button type="submit" onclick="return confirm('¿Estás seguro de que deseas borrar esta tabla?');">Borrar</button>
+            </form>
+            <form action="/modificar-tabla" method="GET" style="display:inline;">
+              <input type="hidden" name="dbName" value="<%= dbName %>">
+              <input type="hidden" name="tableName" value="<%= table[`Tables_in_${dbName}`] %>">
+              <button type="submit">Modificar Campos</button>
+            </form>
+          </td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+  <form action="/agregar-tabla" method="GET" style="display:inline;" class="aggTab">
+    <input type="hidden" name="dbName" value="<%= dbName %>">
+    <button class="aggTab1" type="submit">Agregar Tabla</button>
+  </form>
+</body>
+</html>

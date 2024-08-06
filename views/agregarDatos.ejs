@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Agregar Datos a la Tabla: <%= tableName %> en <%= dbName %></title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <h1>Agregar Datos a la Tabla: <%= tableName %> en <%= dbName %></h1>
+  <form action="/agregar-datos" method="POST" id="aggDatos">
+    <input type="hidden" name="dbName" value="<%= dbName %>">
+    <input type="hidden" name="tableName" value="<%= tableName %>">
+    <% columns.forEach(column => { %>
+      <label for="<%= column %>"><%= column %>:</label>
+      <input type="text" id="<%= column %>" name="data[<%= column %>]" required>
+      <br>
+    <% }) %>
+    <button type="submit">Agregar Datos</button>
+  </form>
+  <script>
+    document.getElementById('aggDatos').addEventListener('submit', function(event) {
+      // Obtener todos los inputs del formulario
+      const inputs = event.target.querySelectorAll('input[type="text"], input[type="email"]');
+      let isValid = true;
+      let errorMessage = '';
+
+      // Validar cada input
+      inputs.forEach(input => {
+        const value = input.value.trim();
+        const id = input.id;
+
+        // Si el campo es email, validar el formato del correo
+        if (id.toLowerCase() === 'email') {
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(value)) {
+            isValid = false;
+            errorMessage = 'Correo electrónico inválido.';
+          }
+        }
+
+        // Puedes agregar más validaciones específicas para otros campos aquí
+      });
+
+      // Si la validación falla, prevenir el envío del formulario y mostrar un mensaje
+      if (!isValid) {
+        event.preventDefault();
+        alert(errorMessage);
+      }
+    });
+  </script>
+</body>
+</html>
